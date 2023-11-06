@@ -24,55 +24,6 @@ function getTopPerformProjects(req, res) {
   }
 }
 
-async function createProject(req, res) {
-  try {
-    const body = await getPostData(req);
-
-    const project = JSON.parse(body);
-
-    console.log(project);
-
-    projects.push(project);
-
-    res.writeHead(201, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify(project));
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function deleteProject(req, res) {
-  try {
-    const body = await getPostData(req);
-
-    const b = JSON.parse(body);
-
-    console.log(b);
-
-    // console log the type of b.id
-    console.log(typeof b.id);
-
-    // find index of project with id b.id
-    const index = projects.findIndex((project) => project.id === b.id);
-
-    // pop the project out of the array at index
-    projects.splice(index, 1);
-
-    console.log(index);
-    
-
-
-    res.writeHead(200, { "Content-Type": "application/json" });
-
-    return res.end(JSON.stringify({ message: `Project ${b.id} removed` }));
-
-
-
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 function getCompletedProjects(req, res) {
   console.log("getting completed projects");
   const completedProjects = projects.filter((project) => project.isCompleted);
@@ -84,10 +35,52 @@ function getCompletedProjects(req, res) {
   }
 }
 
+async function createProject(req, res) {
+  try {
+    const body = await getPostData(req); 
+
+    const project = JSON.parse(body);
+
+    console.log("Adding Project", project);
+
+    projects.push(project);
+
+    sendResponse(res, 200, JSON.stringify(project));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function deleteProject(req, res) {
+  try {
+    const body = await getPostData(req);
+
+    const parsedBodyObject = JSON.parse(body); // { id: 1 }
+
+    console.log(parsedBodyObject);
+
+    console.log(typeof parsedBodyObject.id);
+
+    const index = projects.findIndex(
+      (project) => project.id === parsedBodyObject.id
+    );
+
+    projects.splice(index, 1);
+
+    sendResponse(
+      res,
+      200,
+      JSON.stringify({ message: `Project ${parsedBodyObject.id} removed` })
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = {
   getAllProjects,
   getTopPerformProjects,
+  getCompletedProjects,
   deleteProject,
   createProject,
 };

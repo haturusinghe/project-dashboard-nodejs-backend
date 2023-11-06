@@ -29,6 +29,9 @@ const server = http.createServer((req, res) => {
     "/api/v1/projects/top": {
       GET: ProjectController.getTopPerformProjects,
     },
+    "/api/v1/projects/completed": {
+      GET: ProjectController.getCompletedProjects,
+    },
     "/api/v1/projects/save": {
       POST: ProjectController.createProject,
     },
