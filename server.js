@@ -13,7 +13,7 @@ const server = http.createServer((req, res) => {
     '/api/v1/projects': {
       'GET': ProjectController.getAllProjects,
     },
-    '/api/v1/projects/getTopProject': {
+    '/api/v1/projects/top': {
       'GET': ProjectController.getTopPerformProjects,
     },
     '/api/v1/projects/': {
