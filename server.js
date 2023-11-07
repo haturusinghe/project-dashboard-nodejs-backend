@@ -21,31 +21,18 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Define API routes and methods
-  const routes = {
-    "/api/v1/projects/all": {
-      GET: ProjectController.getAllProjects,
-    },
-    "/api/v1/projects/top": {
-      GET: ProjectController.getTopPerformProjects,
-    },
-    "/api/v1/projects/completed": {
-      GET: ProjectController.getCompletedProjects,
-    },
-    "/api/v1/projects/save": {
-      POST: ProjectController.createProject,
-    },
-    "/api/v1/projects/delete": {
-      POST: ProjectController.deleteProject,
-    },
-  };
-
-  // Extract route and method from request
-  const route = routes[req.url] && routes[req.url][req.method];
-
-  // Handle the request based on the defined routes and methods
-  if (route) {
-    route(req, res);
+  if (req.url === "/api/v1/projects/all" && req.method === "GET") {
+    ProjectController.getAllProjects(req, res);
+  } else if (req.url === "/api/v1/projects/top" && req.method === "GET") {
+    ProjectController.getTopPerformProjects(req, res);
+  } else if (req.url === "/api/v1/projects/completed" && req.method === "GET") {
+    ProjectController.getCompletedProjects(req, res);
+  } else if (req.url === "/api/v1/projects/save" && req.method === "POST") {
+    ProjectController.createProject(req, res);
+  } else if (req.method === "DELETE" && req.url.startsWith("/api/v1/projects/delete/")) {
+    // Extract project ID from the URL
+    const projectId = parseInt(req.url.split("/").pop(), 10);
+    ProjectController.deleteProject(req, res, projectId);
   } else {
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "No Routes Found" }));
