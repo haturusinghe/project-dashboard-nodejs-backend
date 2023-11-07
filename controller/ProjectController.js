@@ -20,7 +20,7 @@ function getTopPerformProjects(req, res) {
   if (topPerformProjects.length > 0) {
     sendResponse(res, 200, topPerformProjects);
   } else {
-    sendResponse(res, 404, { message: "No top-performing projects found" });
+    sendResponse(res, 404, []);
   }
 }
 
@@ -31,7 +31,7 @@ function getCompletedProjects(req, res) {
   if (completedProjects.length > 0) {
     sendResponse(res, 200, completedProjects);
   } else {
-    sendResponse(res, 404, { message: "No completed projects found" });
+    sendResponse(res, 404, { message: 404 });
   }
 }
 
@@ -70,7 +70,7 @@ async function deleteProject(req, res) {
     sendResponse(
       res,
       200,
-      JSON.stringify({ message: `Project ${parsedBodyObject.id} removed` })
+      JSON.stringify({ message: parsedBodyObject.id  })
     );
   } catch (error) {
     console.log(error);
