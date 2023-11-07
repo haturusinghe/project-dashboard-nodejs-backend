@@ -37,7 +37,7 @@ function getCompletedProjects(req, res) {
 
 async function createProject(req, res) {
   try {
-    const body = await getPostData(req); 
+    const body = await getPostData(req);
 
     const project = JSON.parse(body);
 
@@ -51,38 +51,34 @@ async function createProject(req, res) {
   }
 }
 
-async function deleteProject(req, res) {
+function deleteProject(req, res, pid) {
   try {
-    const body = await getPostData(req);
+    console.log("Trying to delete project", pid);
+    const index = projects.findIndex((project) => project.id === pid);
 
-    const parsedBodyObject = JSON.parse(body); // { id: 1 }
-
-    console.log(parsedBodyObject);
-
-    console.log(typeof parsedBodyObject.id);
-
-    const index = projects.findIndex(
-      (project) => project.id === parsedBodyObject.id
-    );
+    console.log("Index", index);
 
     projects.splice(index, 1);
 
-    sendResponse(
-      res,
-      200,
-      JSON.stringify({ message: parsedBodyObject.id  })
-    );
+    if (index === -1) {
+      sendResponse(res, 404, JSON.stringify({ message: "Project Not Found" }));
+      return;
+    } else {
+      sendResponse(res, 200, JSON.stringify({ message: pid }));
+    }
   } catch (error) {
     console.log(error);
   }
 }
+
+
 
 module.exports = {
   getAllProjects,
   getTopPerformProjects,
   getCompletedProjects,
   deleteProject,
-  createProject,
+  createProject
 };
 
 function getPostData(req) {
