@@ -10,7 +10,7 @@ function getAllProjects(req, res) {
   sendResponse(res, 200, projects);
 }
 
-function getTopPerformProjects(req, res) {
+function getTopProjectsByRevenue(req, res) {
   console.log("getting top projects");
   const topPerformProjects = projects
     .filter((project) => project.revenue > 0)
@@ -84,7 +84,7 @@ function deleteProject(req, res, pid) {
 
 module.exports = {
   getAllProjects,
-  getTopPerformProjects,
+  getTopProjectsByRevenue,
   getCompletedProjects,
   deleteProject,
   createProject
