@@ -43,7 +43,14 @@ async function createProject(req, res) {
 
     if(newProject.id == -1){
       console.log("Updainting ID");
-      newProject.id = projects.length + 1;
+      let maxId = 0;
+      projects.forEach(project => {
+        if(project.id > maxId){
+          maxId = project.id;
+        }
+      });
+      newProject.id = maxId + 1;
+      
     }
 
     console.log("Adding Project", newProject);
