@@ -43,10 +43,7 @@ async function createProject(req, res) {
 
     if(newProject.id == -1){
       console.log("Updainting ID");
-      newProject.id = Math.floor(Math.random() * 1000);
-      while(projects.find((project) => project.id === newProject.id)){
-        newProject.id = Math.floor(Math.random() * 1000);
-      }
+      newProject.id = projects.length + 1;
     }
 
     console.log("Adding Project", newProject);
