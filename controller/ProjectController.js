@@ -39,13 +39,21 @@ async function createProject(req, res) {
   try {
     const body = await getPostData(req);
 
-    const project = JSON.parse(body);
+    const newProject = JSON.parse(body);
 
-    console.log("Adding Project", project);
+    if(newProject.id == -1){
+      console.log("Updainting ID");
+      newProject.id = Math.floor(Math.random() * 1000);
+      while(projects.find((project) => project.id === newProject.id)){
+        newProject.id = Math.floor(Math.random() * 1000);
+      }
+    }
 
-    projects.push(project);
+    console.log("Adding Project", newProject);
 
-    sendResponse(res, 200, JSON.stringify(project));
+    projects.push(newProject);
+
+    sendResponse(res, 200, JSON.stringify(newProject));
   } catch (error) {
     console.log(error);
   }
