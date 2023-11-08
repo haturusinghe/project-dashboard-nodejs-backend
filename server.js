@@ -24,7 +24,7 @@ const server = http.createServer((req, res) => {
   if (req.url === "/api/v1/projects/all" && req.method === "GET") {
     ProjectController.getAllProjects(req, res);
   } else if (req.url === "/api/v1/projects/top" && req.method === "GET") {
-    ProjectController.getTopPerformProjects(req, res);
+    ProjectController.getTopProjectsByRevenue(req, res);
   } else if (req.url === "/api/v1/projects/completed" && req.method === "GET") {
     ProjectController.getCompletedProjects(req, res);
   } else if (req.url === "/api/v1/projects/save" && req.method === "POST") {
