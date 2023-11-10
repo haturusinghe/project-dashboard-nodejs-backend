@@ -40,7 +40,7 @@ const server = http.createServer((req, res) => {
     req.url.startsWith("/api/v1/projects/top/") &&
     req.method === "GET"
   ) {
-    // Extract project ID from the URL
+    // Extract count from the URL
     const count = parseInt(req.url.split("/").pop(), 10);
     ProjectController.getTopProjectsCountByRevenue(req, res, count);
   } else {
