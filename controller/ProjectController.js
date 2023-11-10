@@ -10,12 +10,26 @@ function getAllProjects(req, res) {
   sendResponse(res, 200, projects);
 }
 
-function getTopProjectsByRevenue(req, res) {
+function getTop3ProjectsByRevenue(req, res) {
   console.log("getting top projects");
   const topPerformProjects = projects
     .filter((project) => project.revenue > 0)
     .sort((a, b) => b.revenue - a.revenue)
     .slice(0, 3);
+
+  if (topPerformProjects.length > 0) {
+    sendResponse(res, 200, topPerformProjects);
+  } else {
+    sendResponse(res, 404, []);
+  }
+}
+
+function getTopProjectsCountByRevenue(req, res,count) {
+  console.log("getting top projects");
+  const topPerformProjects = projects
+    .filter((project) => project.revenue > 0)
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, count);
 
   if (topPerformProjects.length > 0) {
     sendResponse(res, 200, topPerformProjects);
@@ -84,7 +98,8 @@ function deleteProject(req, res, pid) {
 
 module.exports = {
   getAllProjects,
-  getTopProjectsByRevenue,
+  getTop3ProjectsByRevenue,
+  getTopProjectsCountByRevenue,
   getCompletedProjects,
   deleteProject,
   createProject
