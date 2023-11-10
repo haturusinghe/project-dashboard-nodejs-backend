@@ -45,7 +45,7 @@ function getCompletedProjects(req, res) {
   if (completedProjects.length > 0) {
     sendResponse(res, 200, completedProjects);
   } else {
-    sendResponse(res, 404, { message: 404 });
+    sendResponse(res, 404, []);
   }
 }
 
