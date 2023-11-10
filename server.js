@@ -24,15 +24,25 @@ const server = http.createServer((req, res) => {
   if (req.url === "/api/v1/projects/all" && req.method === "GET") {
     ProjectController.getAllProjects(req, res);
   } else if (req.url === "/api/v1/projects/top" && req.method === "GET") {
-    ProjectController.getTopProjectsByRevenue(req, res);
+    ProjectController.getTop3ProjectsByRevenue(req, res);
   } else if (req.url === "/api/v1/projects/completed" && req.method === "GET") {
     ProjectController.getCompletedProjects(req, res);
   } else if (req.url === "/api/v1/projects/save" && req.method === "POST") {
     ProjectController.createProject(req, res);
-  } else if (req.method === "DELETE" && req.url.startsWith("/api/v1/projects/delete/")) {
+  } else if (
+    req.url.startsWith("/api/v1/projects/delete/") &&
+    req.method === "DELETE"
+  ) {
     // Extract project ID from the URL
     const projectId = parseInt(req.url.split("/").pop(), 10);
     ProjectController.deleteProject(req, res, projectId);
+  } else if (
+    req.url.startsWith("/api/v1/projects/top/") &&
+    req.method === "GET"
+  ) {
+    // Extract count from the URL
+    const count = parseInt(req.url.split("/").pop(), 10);
+    ProjectController.getTopProjectsCountByRevenue(req, res, count);
   } else {
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "No Routes Found" }));
