@@ -17,36 +17,24 @@ function getTop3ProjectsByRevenue(req, res) {
     .sort((a, b) => b.revenue - a.revenue)
     .slice(0, 3);
 
-  if (topPerformProjects.length > 0) {
-    sendResponse(res, 200, topPerformProjects);
-  } else {
-    sendResponse(res, 404, []);
-  }
+  sendResponse(res, 200, topPerformProjects);
 }
 
-function getTopProjectsCountByRevenue(req, res,count) {
+function getTopProjectsCountByRevenue(req, res, count) {
   console.log("getting top projects");
   const topPerformProjects = projects
     .filter((project) => project.revenue > 0)
     .sort((a, b) => b.revenue - a.revenue)
     .slice(0, count);
 
-  if (topPerformProjects.length > 0) {
-    sendResponse(res, 200, topPerformProjects);
-  } else {
-    sendResponse(res, 404, []);
-  }
+  sendResponse(res, 200, topPerformProjects);
 }
 
 function getCompletedProjects(req, res) {
   console.log("getting completed projects");
   const completedProjects = projects.filter((project) => project.isCompleted);
 
-  if (completedProjects.length > 0) {
-    sendResponse(res, 200, completedProjects);
-  } else {
-    sendResponse(res, 404, []);
-  }
+  sendResponse(res, 200, completedProjects);
 }
 
 async function createProject(req, res) {
@@ -55,13 +43,16 @@ async function createProject(req, res) {
 
     const newProject = JSON.parse(body);
 
-    if(newProject.id == -1){
+    if (newProject.id == -1) {
       console.log("Updainting ID");
       projects.sort((a, b) => b.id - a.id);
-      const newId = projects[0].id + 1;
-      newProject.id = newId;
 
-      projects.sort((a, b) => a.id - b.id);
+      if(projects.length == 0) {
+        newProject.id = 1;
+      } else {
+        newProject.id = projects[0].id + 1;
+      }
+
     }
 
     console.log("Adding Project", newProject);
@@ -70,7 +61,15 @@ async function createProject(req, res) {
 
     sendResponse(res, 200, JSON.stringify(newProject));
   } catch (error) {
-    console.log(error);
+    sendResponse(
+      res,
+      500,
+      JSON.stringify({
+        error: "Internal Server Error",
+        message:
+          "An error occurred while trying to add the new project to the database.",
+      })
+    );
   }
 }
 
@@ -84,7 +83,14 @@ function deleteProject(req, res, pid) {
     projects.splice(index, 1);
 
     if (index === -1) {
-      sendResponse(res, 404, JSON.stringify({ message: "Project Not Found" }));
+      sendResponse(
+        res,
+        404,
+        JSON.stringify({
+          error: "Not Found",
+          message: "The project with the specified ID was not found",
+        })
+      );
       return;
     } else {
       sendResponse(res, 200, JSON.stringify({ message: pid }));
@@ -94,17 +100,14 @@ function deleteProject(req, res, pid) {
   }
 }
 
-
-
 module.exports = {
   getAllProjects,
   getTop3ProjectsByRevenue,
   getTopProjectsCountByRevenue,
   getCompletedProjects,
   deleteProject,
-  createProject
+  createProject,
 };
-
 
 // source : https://github.com/bradtraversy/vanilla-node-rest-api/blob/master/utils.js
 function getPostData(req) {
