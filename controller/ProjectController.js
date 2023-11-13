@@ -43,17 +43,15 @@ async function createProject(req, res) {
 
     const newProject = JSON.parse(body);
 
-    if (newProject.id == -1) {
-      console.log("Updainting ID");
-      projects.sort((a, b) => b.id - a.id);
+
+
 
       if(projects.length == 0) {
         newProject.id = 1;
       } else {
-        newProject.id = projects[0].id + 1;
+        newProject.id = projects[projects.length-1].id + 1;
       }
 
-    }
 
     console.log("Adding Project", newProject);
 
