@@ -43,15 +43,11 @@ async function createProject(req, res) {
 
     const newProject = JSON.parse(body);
 
-
-
-
-      if(projects.length == 0) {
-        newProject.id = 1;
-      } else {
-        newProject.id = projects[projects.length-1].id + 1;
-      }
-
+    if (projects.length == 0) {
+      newProject.id = 1;
+    } else {
+      newProject.id = projects[projects.length - 1].id + 1;
+    }
 
     console.log("Adding Project", newProject);
 
