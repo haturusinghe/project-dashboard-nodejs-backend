@@ -1,6 +1,6 @@
 const http = require("http");
 const ProjectController = require("./controller/ProjectController");
-const handleCors = require("./utlils");
+const { handleCors } = require("./utlils");
 const port = 5001;
 const baseUrl = "/api/projects";
 
