@@ -40,20 +40,23 @@ async function createProject(req, res) {
     const body = await getPostData(req);
     const newProject = JSON.parse(body);
 
+    const project = projects.filter(p => p.name === newProject.name);
+    if (project.length) return sendResponse(res, 400, {error: "Project already exists!"});
+
     if (projects.length == 0) 
       newProject.id = 1;
     else 
       newProject.id = projects[projects.length - 1].id + 1;
 
     projects.push(newProject);
-    sendResponse(res, 200, JSON.stringify(newProject));
+    sendResponse(res, 200, newProject);
   } 
   catch (ex) {
     const err = { 
       error: "Internal Server Error", 
       message: "An error occurred while trying to add the new project to the database."
     };
-    sendResponse( res, 500, JSON.stringify(err));
+    sendResponse( res, 500, err);
   }
 }
 
@@ -67,10 +70,10 @@ function deleteProject(req, res, pid) {
         error: "Not Found", 
         message: "The project with the specified ID was not found"
       }
-      return sendResponse( res, 404, JSON.stringify(err));
+      return sendResponse( res, 404, err);
     } 
     else {
-      sendResponse(res, 200, JSON.stringify({ message: pid }));
+      sendResponse(res, 200, { message: pid });
     }
   } 
   catch (error) {
