@@ -35,4 +35,10 @@ function getPostData(req) {
   });
 }
 
-module.exports = { handleCors, getPostData };
+const validateProject = (project) => {
+    if (!project.name || !project.revenue || !project.hasOwnProperty('isCompleted')) 
+        return false;
+    return true;
+}
+
+module.exports = { handleCors, getPostData, validateProject };

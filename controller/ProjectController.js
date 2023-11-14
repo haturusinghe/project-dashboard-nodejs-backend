@@ -1,5 +1,5 @@
 const projects = require("../data");
-const { getPostData } = require("../utlils");
+const { getPostData, validateProject } = require("../utlils");
 
 function sendResponse(res, status, data) {
   res.writeHead(status, { "Content-Type": "application/json" });
@@ -40,14 +40,13 @@ async function createProject(req, res) {
     const body = await getPostData(req);
     const newProject = JSON.parse(body);
 
+    const isValid = validateProject(newProject);
+    if (!isValid) return sendResponse(res, 400, {error: "Invalid project!"});
+
     const project = projects.filter(p => p.name === newProject.name);
     if (project.length) return sendResponse(res, 400, {error: "Project already exists!"});
 
-    if (projects.length == 0) 
-      newProject.id = 1;
-    else 
-      newProject.id = projects[projects.length - 1].id + 1;
-
+    newProject.id = Math.max(...projects.map(p => p.id), 0) + 1;
     projects.push(newProject);
     sendResponse(res, 200, newProject);
   } 
