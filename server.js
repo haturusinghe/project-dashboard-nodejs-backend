@@ -7,6 +7,17 @@ const baseUrl = "/api/projects";
 const server = http.createServer((req, res) => {
   handleCors(req, res);
 
+  // Handle preflight requests (OPTIONS method)
+  if (req.method === "OPTIONS") {
+    res.writeHead(200, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
+    res.end();
+    return;
+  }
+
   if (req.url === baseUrl && req.method === "GET")
     ProjectController.getAllProjects(req, res);
 
