@@ -36,7 +36,7 @@ function getPostData(req) {
 }
 
 const validateProject = (project) => {
-    if (!project.name || !project.revenue || !project.hasOwnProperty('isCompleted')) 
+    if (!project.hasOwnProperty("name") || !project.hasOwnProperty("revenue") || !project.hasOwnProperty('isCompleted')) 
         return false;
     return true;
 }
