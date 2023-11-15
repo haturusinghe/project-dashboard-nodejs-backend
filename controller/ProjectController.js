@@ -8,7 +8,7 @@ function sendResponse(res, status, data) {
 
 function getAllProjects(req, res) {
   if (!projects.length) {
-    return sendResponse(res, 404, { error: "Projects not found!" });
+    return sendResponse(res, 404, { message: "Projects not found!" });
   }
   sendResponse(res, 200, projects);
 }
@@ -20,7 +20,9 @@ function getTop3ProjectsByRevenue(req, res) {
     .slice(0, 3);
 
   if (!topPerformProjects.length) {
-    return sendResponse(res, 404, { error: "Top performed projects not found!" });
+    return sendResponse(res, 404, {
+      message: "Top performed projects not found!",
+    });
   }
 
   sendResponse(res, 200, topPerformProjects);
@@ -29,8 +31,8 @@ function getTop3ProjectsByRevenue(req, res) {
 function getCompletedProjects(req, res) {
   const completedProjects = projects.filter((project) => project.isCompleted);
 
-  if (!completedProjects) 
-    return sendResponse(res, 404, { error: "No completed projects" });
+  if (!completedProjects)
+    return sendResponse(res, 404, { message: "No completed projects" });
 
   sendResponse(res, 200, completedProjects);
 }
@@ -41,21 +43,21 @@ async function createProject(req, res) {
     const newProject = JSON.parse(body);
 
     const isValid = validateProject(newProject);
-    if (!isValid) return sendResponse(res, 400, {error: "Invalid project!"});
+    if (!isValid)
+      return sendResponse(res, 400, { message: "Invalid project!" });
 
-    const project = projects.filter(p => p.name === newProject.name);
-    if (project.length) return sendResponse(res, 400, {error: "Project already exists!"});
+    const project = projects.filter((p) => p.name === newProject.name);
+    if (project.length)
+      return sendResponse(res, 400, { message: "Project already exists!" });
 
-    newProject.id = Math.max(...projects.map(p => p.id), 0) + 1;
+    newProject.id = Math.max(...projects.map((p) => p.id), 0) + 1;
     projects.push(newProject);
     sendResponse(res, 200, newProject);
-  } 
-  catch (ex) {
-    const err = { 
-      error: "Internal Server Error", 
-      message: "An error occurred while trying to add the new project to the database."
+  } catch (ex) {
+    const err = {
+      message: "An error occurred while trying to add the new project",
     };
-    sendResponse( res, 500, err);
+    sendResponse(res, 500, err);
   }
 }
 
@@ -66,16 +68,16 @@ function deleteProject(req, res, pid) {
 
     if (index === -1) {
       const err = {
-        error: "Not Found", 
-        message: "The project with the specified ID was not found"
-      }
-      return sendResponse( res, 404, err);
-    } 
-    else {
-      sendResponse(res, 200, { message: pid });
+        message: "The project with the specified ID was not found",
+      };
+      return sendResponse(res, 404, err);
+    } else {
+      sendResponse(res, 200, {
+        id: pid,
+        message: "Project deleted successfully",
+      });
     }
-  } 
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
 }
